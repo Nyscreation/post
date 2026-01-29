@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KCastor | Sistema Gestor de Vendas</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --primary: #3b82f6;      /* Azul Institucional */
+            --accent: #0ea5e9;       /* Azul Claro Cyan */
+            --success: #10b981;      /* Verde Venda */
+            --glass: rgba(30, 41, 59, 0.7); /* Vidro mais escuro/sóbrio */
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text: #f8fafc;
+            --text-muted: #cbd5e1;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            /* Fundo sutil com gradiente para dar profundidade sem assustar */
+            background-image: radial-gradient(circle at 50% 0%, #1e3a8a 0%, #0f172a 60%);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Container Principal */
+        .container {
+            max-width: 600px; /* Otimizado para leitura em Mobile */
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Elementos Glassmorphism (Vidro) */
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Header */
+        header { text-align: center; margin-bottom: 30px; padding-top: 10px; }
+        .logo-img { max-width: 140px; height: auto; margin-bottom: 15px; }
+        
+        h1 { font-size: 1.8rem; font-weight: 800; line-height: 1.2; letter-spacing: -0.5px; }
+        h1 span { color: var(--accent); }
+        
+        h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 15px; color: var(--text); }
+        h3 { font-size: 1.1rem; color: var(--primary); font-weight: 600; margin-bottom: 5px; }
+        p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 15px; }
+
+        /* Badge de Segurança/Confiança (Substitui a sirene) */
+        .trust-badge {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .trust-icon { font-size: 28px; color: var(--primary); }
+
+        /* Lista de Público Alvo */
+        .audience-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .audience-item {
+            background: rgba(255,255,255,0.03);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            border: 1px solid var(--glass-border);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+
+        /* Funcionalidades (Gestor) */
+        .feature-box {
+            margin-top: 20px;
+        }
+        .feature-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .feature-title { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; color: white; font-weight: 600;}
+        .feature-icon { color: var(--accent); font-size: 1.3rem; }
+
+        /* Oferta e Preço */
+        .offer-section {
+            text-align: center;
+            border: 2px solid var(--success); /* Verde para indicar oportunidade */
+            position: relative;
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, rgba(15, 23, 42, 0.8) 100%);
+        }
+        .price-container { margin: 20px 0; }
+        .price-label { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+        .price-old { text-decoration: line-through; color: #64748b; font-size: 1.1rem; }
+        .price-new { font-size: 3.2rem; font-weight: 900; color: var(--success); line-height: 1; letter-spacing: -1px; }
+        .price-cents { font-size: 1.5rem; vertical-align: super; }
+
+        /* Cronômetro Elegante */
+        .timer-wrapper {
+            display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;
+        }
+        .timer-digit {
+            background: rgba(0,0,0,0.4);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            border: 1px solid #334155;
+            color: var(--accent);
+        }
+
+        /* Botão Principal */
+        .btn-cta {
+            display: block;
+            width: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            text-decoration: none;
+            padding: 20px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+            transition: transform 0.2s;
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: pulse-blue 3s infinite;
+        }
+        .btn-cta:active { transform: scale(0.98); }
+        .btn-subtext { font-size: 0.8rem; margin-top: 10px; color: var(--text-muted); }
+
+        @keyframes pulse-blue {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+
+        /* Depoimentos Compactos */
+        .review-card {
+            background: rgba(255,255,255,0.02);
+            border-left: 3px solid var(--success);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+        .stars { color: #eab308; font-size: 0.8rem; margin-bottom: 5px; }
+
+        footer { text-align: center; padding: 40px 0 20px; color: #475569; font-size: 0.8rem; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header>
+            <img src="logo.png" alt="KCastor Gestor" class="logo-img">
+            <h1>Profissionalize suas Vendas com o <span id="typing">Gestor KCastor</span></h1>
+        </header>
+
+        <div class="glass-panel trust-badge">
+            <i class='bx bx-shield-quarter trust-icon'></i>
+            <div>
+                <strong>Segurança e Organização</strong>
+                <p style="margin:0; font-size: 0.85rem; color: #cbd5e1;">A ferramenta oficial para quem quer sair do amadorismo e vender com seriedade.</p>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h2 style="text-align: center;">Uma Oportunidade de Ouro para:</h2>
+            <div class="audience-grid">
+                <div class="audience-item"><i class='bx bx-store-alt'></i> Lojistas</div>
+                <div class="audience-item"><i class='bx bx-restaurant'></i> Restaurantes</div>
+                <div class="audience-item"><i class='bx bx-package'></i> Atacadistas</div>
+                <div class="audience-item"><i class='bx bx-home-heart'></i> Vendas em Casa</div>
+                <div class="audience-item"><i class='bx bx-shopping-bag'></i> E-commerce</div>
+                <div class="audience-item"><i class='bx bx-coffee-togo'></i> Lanchonetes</div>
+            </div>
+            <p style="text-align: center; margin-top: 10px;">Se você vende produtos físicos, o <strong>KCastor</strong> foi feito para você.</p>
+        </div>
+
+        <div class="glass-panel">
+            <h2>Conheça o Poder do "Gestor"</h2>
+            <p>Esqueça a complexidade. Nós entregamos um sistema completo que cria seu <strong>Catálogo Virtual</strong> e conecta seu cliente direto ao seu WhatsApp.</p>
+            
+            <div class="feature-box">
+                <div class="feature-card">
+                    <div class="feature-title"><i class='bx bxl-whatsapp feature-icon'></i> Pedido Direto no WhatsApp</div>
+                    <p style="margin:0; font-size:0.9rem">Seu cliente escolhe os produtos e o sistema monta a mensagem pronta. Sem "carrinho" complicado, sem cadastro chato para o cliente.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-title"><i class='bx bx-line-chart feature-icon'></i> Painel Dashboard</div>
+                    <p style="margin:0; font-size:0.9rem">Saiba exatamente o que está acontecendo. Controle de visualizações, produtos mais acessados e dados para tomada de decisão.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-title"><i class='bx bx-images feature-icon'></i> Marketing Automático</div>
+                    <p style="margin:0; font-size:0.9rem">Crie <strong>Cards de Oferta</strong> ilimitados para postar no Instagram e Status. O sistema também gera <strong>Iscas Diárias</strong> para atrair clientes novos.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-panel offer-section">
+            <h3 style="color: var(--success); margin-bottom: 5px;">OFERTA DE LANÇAMENTO</h3>
+            <p>Plano Vitalício - Sem Mensalidades</p>
+            
+            <div class="price-container">
+                <div class="price-old">De R$ 179,90</div>
+                <div class="price-new">R$ 59<span class="price-cents">,90</span></div>
+            </div>
+
+            <div class="timer-wrapper">
+                <div class="timer-digit" id="minutes">14</div>
+                <span style="font-size:1.2rem; padding-top:5px">:</span>
+                <div class="timer-digit" id="seconds">59</div>
+            </div>
+
+            <a href="index.html" class="btn-cta">
+                QUERO MEU SISTEMA AGORA <i class='bx bx-right-arrow-alt'></i>
+            </a>
+            <div class="btn-subtext">🔒 Compra Segura e Entrega Imediata</div>
+        </div>
+
+        <h3 style="margin: 30px 0 15px; text-align: center;">O que os lojistas dizem:</h3>
+        
+        <div class="review-card">
+            <div class="stars">★★★★★</div>
+            "Eu gastava horas criando arte no Canva. Com o Gestor do KCastor, eu gero o card do produto e posto no status em segundos. Vendo muito mais!"<br>
+            <strong>— Ana Paula, Vende Roupas em Casa</strong>
+        </div>
+
+        <div class="review-card">
+            <div class="stars">★★★★★</div>
+            "Perfeito para minha lanchonete. O cliente não se perde, clica e manda o pedido. Simples e direto."<br>
+            <strong>— Ricardo, Hamburgueria Artesanal</strong>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 KCastor Sistemas.<br>Tecnologia para impulsionar seu negócio.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const startMinutes = 15;
+        let time = startMinutes * 60;
+
+        const elMinutes = document.getElementById('minutes');
+        const elSeconds = document.getElementById('seconds');
+
+        setInterval(updateCountdown, 1000);
+
+        function updateCountdown() {
+            const m = Math.floor(time / 60);
+            let s = time % 60;
+
+            s = s < 10 ? '0' + s : s;
+            
+            elMinutes.innerHTML = m;
+            elSeconds.innerHTML = s;
+
+            if (time > 0) {
+                time--;
+            } else {
+                time = startMinutes * 60; // Reinicia o loop
+            }
+        }
+    </script>
+</body>
+</html>
